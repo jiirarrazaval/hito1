@@ -1,0 +1,126 @@
+---
+title: "Plantilla Proyecto"
+author: "José Ignacio Irarrázaval O. "
+format: html
+editor: visual
+---
+
+```{r configuraciones}
+#| message: false
+#| echo: false
+# Esto ya debiera estar cargado en el proyecto en posit.cloud
+# devtools::install_github("business-science/tidyquant")
+# Loads tidyquant, lubridate, xts, quantmod, TTR, and PerformanceAnalytics
+library(tidyverse)
+library(tidyquant)  
+```
+
+## Descripción Activo y Contexto (Hito 1)
+
+Fecha de entrega: Jueves 28 de Septiembre 23:59.
+
+### Definición
+
+Banco Santander Chile es uno de los bancos más grandes del país en términos de activos totales, préstamos y depósitos. Se introdujo en Chile en 1978 estableciendo una filial dirigida principalmente al comercio exterior.
+
+"Antes de la crisis bancaria de 1982-83, el sistema financiero chileno estaba dominado por unos pocos bancos importantes y estaba escasamente regulado. Tras la crisis, el gobierno puso en marcha importantes reformas y en 1990 los bancos extranjeros empezaron a operar en el país. Los bancos españoles Santander y BBVA, junto con Scotiabank, tenían una fuerte presencia en Chile antes de la adquisición del Banco de Chile por parte de Citigroup en 2008. Desde principios de los 90 hasta la actualidad, cerca de la mitad de los bancos que operan en Chile son extranjeros. La introducción de bancos extranjeros ha tenido efectos positivos. En particular, han aplicado políticas crediticias basadas en una selección objetiva de los prestatarios, lo que ha contribuido a modernizar el sistema bancario". (Du, Serrano & Vianna, 2018)
+
+En 1982 Santander compró Banco Español Chile y en 1996 se fusionó con Banco Osorno y la Unión, convirtiéndose en uno de los bancos más grandes del país. En 2002 se fusionó con Banco Santiago, consolidándose como uno de los líderes de la industria financiera, gracias a su estrategia basada en la innovación en productos, la evaluación de riesgos y la calidad del servicio al cliente.
+
+```{r ETL}
+#| echo: false
+# Alternativamente Use FANG data set
+# data("FANG") 
+end <- as_date("2022-12-31")
+# Get AAPL and AMZN Stock Prices
+# AAPL <- tq_get("AAPL", get = "stock.prices", from = "2015-09-01", to = end)
+# AMZN <- tq_get("AMZN", get = "stock.prices", from = "2000-01-01", to = end)
+BSANTANDER <- tq_get("BSANTANDER.SN", get = "stock.prices", from = "2000-01-01", to = end)
+CLP=X <- tq_get("CLP=X", get = "stock.prices", from = "2000-01-01", to = end)
+CHILE <- tq_get("CHILE.SN", get = "stock.prices", from = "2000-01-01", to = end)
+CL <- rbind(BSANTANDER,CLP=X,CHILE)
+```
+
+El activo `BSANTANDER` tiene un valor promedio para el intervalo igual a `r round(mean(BSANTANDER$close),digits=0)`
+
+```{r BSANTANDERline}
+#| echo: false
+BSANTANDER %>%
+    ggplot(aes(x = date, y = close)) +
+    geom_line() +
+    labs(title = "BSANTANDER Line Chart", y = "Closing Price", x = "") + 
+    theme_tq() +
+  geom_hline(yintercept=mean(BSANTANDER$close), linetype="dashed", color = "red")
+```
+
+### Motivación
+
+Los bancos son fundamentales para el funcionamiento de la economía, ya que canalizan el ahorro hacia la inversión. En momentos de crisis los bancos históricamente han tenido retornos positivos, lo cual le da confianza a los inversionistas. Actualmente Banco Santander Chile cuenta con 259 sucursales a lo largo del país, con 68.806.832 MM CLP en activos lo que se resume en un 17,25% de los activos del mercado para Julio del 2023. (Fuente: CMF / Reporte Mensual de Información del Sistema Bancario). En cuanto a la liquidez del banco; "el área de Gestión Financiera gestiona el riesgo de liquidez utilizando una cartera de activos líquidos para garantizar que el Banco mantenga siempre suficiente liquidez para cubrir las fluctuaciones a corto plazo y el financiamiento a largo plazo, cumpliendo con los requisitos normativos internos de liquidez". Por norma los bancos deben tener un Ratio de Cobertura de Liquidez (RCL) mínimo de 60%. "Al 31 de marzo de 2023, el RCL para Banco Santander Chile se ubicó en 182.3% por encima del mínimo". (Fuente: Información Financiera Banco Santander). Es por esto que BSANTANDER es atractivo para los inversionistas debido a su capacidad de solvencia y su gran participación del mercado bancario en el país.
+
+### Contexto
+
+"Banco Santander Chile es parte del Grupo Santander, su principal accionista con el 67,18% de la propiedad. Es una de las acciones más transadas del país, representa el 4,5% de los activos del Grupo y el 7,0% de la utilidad consolidada". (Fuente: Información corporativa Santander Chile, 2023)
+
+Para los bancos existen cuatro tipos de riesgo de mercado: el de inflación, tipo de cambio, tasa de interés y de liquidez.
+
+El riesgo de inflación para los bancos es peligroso ya que con un aumento de la inflación el precio de los bienes sube, por lo que la valorización de los activos y los bonos de un banco caen. Por lo que el banco se ve obligado a subir las tasas para recaudar mas fondos. Esto hace que los créditos se frenen y la estabilidad del banco sea mas frágil. Por lo que tiene que buscar otras opciones como los derivados financieros, los cuales son instrumentos que protegen al banco a un plazo definido en términos de subida de tasas y fluctuaciones del dólar principalmente. El encargado de controlar la inflación es el Banco Central. Y lo que hace es regular el flujo de dinero modificando las tasas y también regula la entrada y salida de dólares de la economía para no devaluar el peso.
+
+![](resumen%20derivados.jpg)
+
+```{r context}
+#| warning: false
+#| echo: false
+start <- end - weeks(6)
+
+CL %>%
+    filter(date >= start - days(2 * 15)) %>%
+    ggplot(aes(x = date, y = close, group = symbol)) +
+    geom_candlestick(aes(open = open, high = high, low = low, close = close)) +
+    geom_ma(ma_fun = SMA, n = 15, color = "darkblue", size = 1) +
+    labs(title = "CL Candlestick Chart", 
+         subtitle = "Experimenting with Mulitple Stocks",
+         y = "Closing Price", x = "") + 
+    coord_x_date(xlim = c(start, end)) +
+    facet_wrap(~ symbol, ncol = 2, scale = "free_y") +
+    theme_tq()
+```
+
+### Análisis de Largo Plazo
+
+#### Caracterización deuda (Aplicación cap. 15)
+
+"Para septiembre, en cuanto a renta variable internacional se aumentó la exposición a activos growth en Europa. Las otras se mantuvieron en Latam y Chile, esto debido a los procesos de bajas de tasas que empezaron en julio los bancos centrales de Chile y Brasil".
+
+"En los instrumentos de deuda local, se prefieren bonos corporativos, ya que van a ser los principales beneficiados ante las caidas de tasa de interés por parte del Banco Central de Chile. En duración, la hemos mantenido frente al mes anterior y hemos mantenido nuestra exposición a papeles en UF, dado los registros de inflación que se esperan y la alta liquidez existente en el mercado". (Fuente: Informe de Inversiones Santander Chile, 2023)
+
+Tabla Renta Variable:
+
+![](wasaaaaaa.png)
+
+Tabla Renta Fija:
+
+![](oeoaoaoaoaoaoa.png)
+
+Caracterización de emisiones históricas (Aplicación cap. 20)
+
+No se encontró informacion acerca de su emisión de acciones, pero lo que se puede decir es que cuenta con 188.446.126.794 acciones en circulación las cuales tienen un precio de \$41,99 para el cierre del dia Juves 28 de septiembre de 2023.
+
+#### Relación con activos derivados
+
+Banco Santander participa del mercado de derivados de diferentes maneras, ya sea en commodities (areas forestales, agricultura, ganaderia, pesca, etc) divisas como el dolar, bonos y acciones. Estos los usa como herramienta para mitigar los riesgos de tipo de cambio, inflación o de tasas de interés. También le ofrece servicios de derivados a sus clientes, tales como forward te tipo de cambio, cross currency swap, interest rate swap, entre otros.
+
+### Reporte grupal
+
+Luego de analizar las industrias de energia, banca e inmobilaria y sus respectivas acciones especificas las cuales son Empresas Copec S.A, Banco Santander - Chile y Cencosud se llegó a la conclusion que las ponderaciones deben ser 40% Empresas Copes S.A, 30% Banco Santander - Chile y 30% Cencosud. Esto debido principalemente a las nuevas tecnologias que hay en el sector energetico las cuales avanzan cada vez más rapido, a esto se le puede agregar que Chile es un posible potencial del hidrogeno verde gracias a sus grandes vientos en el sur y su gran costa que le da el recurso del agua el cual es necesario para dicho proceso. Además se espera que Chile exporte Hidrogeno verde de aca a 20 años lo que le da una gran oportunidad a Empresas Copec a meterse en este nuevo modelo de energia, y tal como se sabe, esa empresa vela por el medio ambiente y energias sutentables.
+
+Cencosud es una empresa muy prestigiosa que atrae a muchos clientes. Ademas, esta en muchos negocios distintos por lo que da una amplia cartera para que inversionistas puedan comprar las acciones. Por otro lado, tiene una alta presencia en Latino America, lo que proporciona una entrada a un mercado amplio y diverso.
+
+Tiene una gestion financiera prudente, que le da la posibilidad de un correcto manejo de deudas, liquidez y buena rentabilidad.
+
+Es por esto que tiene una alta probabilidad de tener una rentibilidad positiva, la cual es bien respaldada por el exito de la empresa y el correcto manejo de decisiones estrategicas y una adaptacion constante.
+
+Banco Santander es una inversión atractiva y segura debido a su alta capacidad de solvencia y por sus retornos promedio históricos positivos durante los periodos de crisis. "Santander gestiona el riesgo de liquidez utilizando una cartera de activos líquidos para garantizar que el Banco mantenga siempre suficiente liquidez para cubrir las fluctuaciones a corto plazo y el financiamiento a largo plazo, cumpliendo con los requisitos normativos internos de liquidez". (Fuente: Información Financiera Santander Chile, 2023) Además, sus inversiones están altamente diversificadas para mitigar riesgos y tener una cartera estable durante el tiempo. A continuación se muestran las principales inversiones del banco en el siguiente gráfico:
+
+![](Imagen%20de%20WhatsApp%202023-09-28%20a%20las%2013.24.03_43e7d919.jpg)
+
+En conclusion las 3 acciones van a rentar a largo plazo pero creemos que la industria de energia especificamente Empresas Copec, es la accion que mas va a generar retornos. Además al otorgar 30% a las otras dos acciones se estaria diverificando el riesgo en caso de enfretar adversidades en Empresas Copec S.A
