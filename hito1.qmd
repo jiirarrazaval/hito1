@@ -119,9 +119,8 @@ Caracterización de emisiones históricas (Aplicación cap. 20)
 
     -   4,637,318,828 acciones en Chile.
 
-```{=html}
 <!-- -->
-```
+
 -   **Detalles Adicionales:**
 
     -   Estructura ADSs: 1 ADS = 1,039 acciones ordinarias.
@@ -130,27 +129,24 @@ Caracterización de emisiones históricas (Aplicación cap. 20)
 
     -   Listado: ADSs en NYSE ("SAN"), acciones en bolsas chilenas.
 
-```{=html}
 <!-- -->
-```
+
 -   **Cotizaciones Recientes (6 Dic 2011):**
 
     -   Precio de cierre ADSs NYSE: US\$66.58 por ADS.
 
     -   Precio de cierre acciones en bolsas chilenas: Ch\$33.39 por acción.
 
-```{=html}
 <!-- -->
-```
+
 -   **Proceso de Colocación:**
 
     -   Subasta de Libro de Órdenes en Bolsa de Santiago.
 
     -   Depósito en ADR Facility para suscriptores internacionales.
 
-```{=html}
 <!-- -->
-```
+
 -   **Bolsas de Listado:**
 
     -   ADSs en NYSE, acciones ordinarias en bolsas chilenas.
@@ -169,7 +165,7 @@ IMAGEN 1: Opciones BSANTANDER
 
 IMAGEN 2: Opcion CALL BSANTANDER
 
-![ *(Fuente: Refinitiv)*](hito2gestfin3.png){width="798"}
+![*(Fuente: Refinitiv)*](hito2gestfin3.png){width="798"}
 
 ### Reporte grupal
 
@@ -188,13 +184,6 @@ Banco Santander es una inversión atractiva y segura debido a su alta capacidad 
 En conclusion las 3 acciones van a rentar a largo plazo pero creemos que la industria de energia especificamente Empresas Copec, es la accion que mas va a generar retornos. Además al otorgar 30% a las otras dos acciones se estaria diverificando el riesgo en caso de enfretar adversidades en Empresas Copec S.A
 
 ## HITO 2
-
-```{python}
-!pip install yfinance
-!pip install pandas
-
-
-```
 
 ```{python}
 import yfinance as yf
