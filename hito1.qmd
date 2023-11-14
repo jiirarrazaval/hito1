@@ -6,6 +6,8 @@ editor: visual
 ---
 
 ```{r configuraciones}
+install.packages(c("yfinance", "pandas", "numpy", "scipy"))
+
 #| message: false
 #| echo: false
 # Esto ya debiera estar cargado en el proyecto en posit.cloud
@@ -103,15 +105,75 @@ Tabla Renta Fija:
 
 Caracterización de emisiones históricas (Aplicación cap. 20)
 
-No se encontró informacion acerca de su emisión de acciones, pero lo que se puede decir es que cuenta con 188.446.126.794 acciones en circulación las cuales tienen un precio de \$41,99 para el cierre del dia Juves 28 de septiembre de 2023.
+# **Emisión de Acciones de Banco Santander-Chile (21 Noviembre 2011)**
+
+-   **Cantidad de Acciones Ofrecidas:**
+
+    -   14,741,593,828 acciones (ordinarias o American Depositary Shares ADS)
+
+-   **Oferta Internacional:**
+
+    -   10,104,275,000 acciones en ADSs.
+
+-   **Oferta Nacional:**
+
+    -   4,637,318,828 acciones en Chile.
+
+```{=html}
+<!-- -->
+```
+-   **Detalles Adicionales:**
+
+    -   Estructura ADSs: 1 ADS = 1,039 acciones ordinarias.
+
+    -   Venta Inicial: Subasta de libro de órdenes en Bolsa de Santiago.
+
+    -   Listado: ADSs en NYSE ("SAN"), acciones en bolsas chilenas.
+
+```{=html}
+<!-- -->
+```
+-   **Cotizaciones Recientes (6 Dic 2011):**
+
+    -   Precio de cierre ADSs NYSE: US\$66.58 por ADS.
+
+    -   Precio de cierre acciones en bolsas chilenas: Ch\$33.39 por acción.
+
+```{=html}
+<!-- -->
+```
+-   **Proceso de Colocación:**
+
+    -   Subasta de Libro de Órdenes en Bolsa de Santiago.
+
+    -   Depósito en ADR Facility para suscriptores internacionales.
+
+```{=html}
+<!-- -->
+```
+-   **Bolsas de Listado:**
+
+    -   ADSs en NYSE, acciones ordinarias en bolsas chilenas.
+
+(Fuente: Información corporativa Banco Santander 2011)
 
 #### Relación con activos derivados
 
-Banco Santander participa del mercado de derivados de diferentes maneras, ya sea en commodities (areas forestales, agricultura, ganaderia, pesca, etc) divisas como el dolar, bonos y acciones. Estos los usa como herramienta para mitigar los riesgos de tipo de cambio, inflación o de tasas de interés. También le ofrece servicios de derivados a sus clientes, tales como forward te tipo de cambio, cross currency swap, interest rate swap, entre otros.
+Banco Santander participa del mercado de derivados de diferentes maneras, ya sea en commodities (areas forestales, agricultura, ganaderia, pesca, etc) divisas como el dolar, bonos y acciones. Estos los usa como herramienta para mitigar los riesgos de tipo de cambio, inflación o de tasas de interés. También le ofrece servicios de derivados a sus clientes, tales como forward te tipo de cambio, cross currency swap, interest rate swap, entre otros. BSANTANDER Chile tambien tiene opciones call y put, a la fecha cuenta con 81 opciones call y 6 opciones put. A continuación se muestran 2 imagenes de refinitiv con toda la informacion. La primera imagen muestra el resumen de todas las opciones y la segunda imagen muestra una opcion en especifico:
+
+IMAGEN 1: Opciones BSANTANDER
+
+![](hito2gestfin4.png)
+
+*(Fuente: Refinitiv)*
+
+IMAGEN 2: Opcion CALL BSANTANDER
+
+![ *(Fuente: Refinitiv)*](hito2gestfin3.png){width="798"}
 
 ### Reporte grupal
 
-Luego de analizar las industrias de energia, banca e inmobilaria y sus respectivas acciones especificas las cuales son Empresas Copec S.A, Banco Santander - Chile y Cencosud se llegó a la conclusion que las ponderaciones deben ser 40% Empresas Copes S.A, 30% Banco Santander - Chile y 30% Cencosud. Esto debido principalemente a las nuevas tecnologias que hay en el sector energetico las cuales avanzan cada vez más rapido, a esto se le puede agregar que Chile es un posible potencial del hidrogeno verde gracias a sus grandes vientos en el sur y su gran costa que le da el recurso del agua el cual es necesario para dicho proceso. Además se espera que Chile exporte Hidrogeno verde de aca a 20 años lo que le da una gran oportunidad a Empresas Copec a meterse en este nuevo modelo de energia, y tal como se sabe, esa empresa vela por el medio ambiente y energias sutentables.
+Luego de analizar las industrias de energia, banca e inmobilaria y sus respectivas acciones especificas las cuales son Empresas Copec S.A, Banco Santander - Chile y Cencosud se llegó a la conclusion que las ponderaciones deben ser 40% Empresas Copec S.A, 30% Banco Santander - Chile y 30% Cencosud. Esto debido principalemente a las nuevas tecnologias que hay en el sector energetico las cuales avanzan cada vez más rapido, a esto se le puede agregar que Chile es un posible potencial del hidrogeno verde gracias a sus grandes vientos en el sur y su gran costa que le da el recurso del agua el cual es necesario para dicho proceso. Además se espera que Chile exporte Hidrogeno verde de aca a 20 años lo que le da una gran oportunidad a Empresas Copec a meterse en este nuevo modelo de energia, y tal como se sabe, esa empresa vela por el medio ambiente y energias sutentables.
 
 Cencosud es una empresa muy prestigiosa que atrae a muchos clientes. Ademas, esta en muchos negocios distintos por lo que da una amplia cartera para que inversionistas puedan comprar las acciones. Por otro lado, tiene una alta presencia en Latino America, lo que proporciona una entrada a un mercado amplio y diverso.
 
@@ -124,3 +186,210 @@ Banco Santander es una inversión atractiva y segura debido a su alta capacidad 
 ![](Imagen%20de%20WhatsApp%202023-09-28%20a%20las%2013.24.03_43e7d919.jpg)
 
 En conclusion las 3 acciones van a rentar a largo plazo pero creemos que la industria de energia especificamente Empresas Copec, es la accion que mas va a generar retornos. Además al otorgar 30% a las otras dos acciones se estaria diverificando el riesgo en caso de enfretar adversidades en Empresas Copec S.A
+
+## HITO 2
+
+```{python}
+!pip install yfinance
+!pip install pandas
+
+
+```
+
+```{python}
+import yfinance as yf
+import pandas as pd
+import numpy as np
+from scipy.stats import norm
+
+
+```
+
+## **Recopilación datos Yahoo finance de BSANTANDER**
+
+```{python}
+# Definir el símbolo de la acción y el rango de fechas
+symbol = "BSANTANDER.SN"
+start_date = "2020-01-01"
+end_date = "2023-10-26"
+
+# Obtener los datos históricos
+data = yf.download(symbol, start=start_date, end=end_date)
+
+```
+
+```{python}
+# Usando el DataFrame "data" que obtuviste de Yahoo Finance
+import pandas as pd
+
+# Calcular desviación estándar, media y valor máximo de la columna "Close"
+std_dev = data["Close"].std()
+mean = data["Close"].mean()
+maxx = data["Close"].max()
+
+# Get the stock data
+ticker = yf.Ticker(symbol)
+current_price = ticker.history().tail(1)["Close"].values[0]
+
+print("Current Price:", current_price)
+
+print("Desviación Estándar:", std_dev)
+print("Media:", mean)
+print("Valor Máximo:", maxx)
+```
+
+# Valoración opciones aplicada
+
+Tome en consideración el modelo continuio de Black and Scholes:
+
+$$C(S,t)=S\cdot\Phi(d_1)-K\exp(-R\cdot t)\cdot\Phi(d_2)$$
+
+donde $d_1=\frac{\log\frac{S}{K}+\left(R+\frac{\sigma^2}{2}\right)\cdot t}{\sqrt{\sigma^2\cdot t}}$ y $d_2=d_1-\sqrt{\sigma^2\cdot t}$.
+
+Defina los parámetros asociados a valores del activo definido en la Tarea 1 y calcule el valor de una opción de compra.
+
+```{python}
+# Parámetros de test
+K = maxx
+r = 0.005
+T = 1
+sigma = std_dev / mean
+S0 = current_price
+d1 = (np.log(S0 / K) + (r + (sigma ** 2) / 2) * T) / (sigma * np.sqrt(T))
+d2 = d1 - sigma * np.sqrt(T)
+c = S0 * norm.cdf(d1) - K * np.exp(-r * T) * norm.cdf(d2)
+print("Valor de la opción (CALL) mediante modelo Black Scholes:", c)
+```
+
+## **Modelo Binomial**
+
+El modelo binomial es una herramienta utilizada en finanzas para valorar opciones. Se basa en la idea de dividir el tiempo en pasos discretos y modelar el comportamiento del precio del activo subyacente en cada paso. La valoración se realiza retrocediendo desde el final hasta el presente, calculando el valor esperado en cada paso.
+
+En el contexto de opciones financieras, el modelo binomial evalúa dos posibles resultados en cada paso de tiempo, representados por "subidas" y "bajadas" en el precio del activo. Con estos resultados, se calculan las probabilidades de subida y bajada, y se determina el valor presente de la opción.
+
+La fórmula básica utiliza la tasa de interés libre de riesgo y la volatilidad del activo subyacente para calcular el valor presente neto de la opción en cada paso. Este proceso se repite hasta llegar al presente, proporcionando así una valoración para la opción en el momento actual.
+
+![](hito2gestfin1.png){width="470"}
+
+![](hito2gestfin2.png)
+
+## Binomial 1 periodo
+
+```{python}
+
+import numpy as np
+
+# Parámetros
+K = maxx  # Precio de ejercicio
+r = 0.005  # Tasa libre de riesgo
+T = 1  # Plazo en años
+N = 1  # Número de pasos en el modelo binomial
+S0 = current_price  # Precio actual del activo subyacente
+
+# Cálculo del paso del tiempo
+dt = T / N
+
+# Cálculo de los factores de descuento
+discount_factor = np.exp(-r * dt)
+
+# Probabilidades de movimiento arriba y abajo
+u = np.exp(sigma * np.sqrt(dt))
+d = 1 / u
+
+# Cálculo de la probabilidad neutra al riesgo
+q = (np.exp(r * dt) - d) / (u - d)
+
+# Crear un array para almacenar los precios de las acciones en cada paso
+stock_prices = np.zeros(N+1)
+
+# Inicializar el precio de la acción en el paso inicial
+stock_prices[0] = S0
+
+# Calcular los precios de las acciones en cada paso
+for i in range(1, N+1):
+    stock_prices[i] = stock_prices[i-1] * u
+
+# Calcular los valores de la opción en el último paso (a la expiración)
+option_values = np.maximum(stock_prices - K, 0)
+
+# Retroceder en el tiempo para calcular el valor de la opción en cada paso anterior
+for j in range(N-1, -1, -1):
+    for i in range(j+1):
+        option_values[i] = (q * option_values[i+1] + (1 - q) * option_values[i]) * discount_factor
+
+# El valor de la opción de compra (CALL) es el valor en el paso inicial
+call_option_value = option_values[0]
+
+print("Valor de la opción (CALL) mediante el modelo binomial:", call_option_value)
+```
+
+## Binomial 2 periodos
+
+```{python}
+import numpy as np
+
+# Parámetros
+K = maxx  # Precio de ejercicio
+r = 0.005  # Tasa libre de riesgo
+T = 1  # Plazo en años
+N = 2  # Número de pasos en el modelo binomial (tres posibles resultados en el tiempo: el precio del activo subyacente puede subir dos veces, bajar dos veces o subir una vez y bajar una vez.)
+S0 = current_price  # Precio actual del activo subyacente
+
+# Cálculo del paso del tiempo
+dt = T / N
+
+# Cálculo de los factores de descuento
+discount_factor = np.exp(-r * dt)
+
+# Probabilidades de movimiento arriba y abajo
+u = np.exp(sigma * np.sqrt(dt))
+d = 1 / u
+
+# Cálculo de la probabilidad neutra al riesgo
+q = (np.exp(r * dt) - d) / (u - d)
+
+# Crear un array para almacenar los precios de las acciones en cada paso
+stock_prices = np.zeros(N+1)
+
+# Inicializar el precio de la acción en el paso inicial
+stock_prices[0] = S0
+
+# Calcular los precios de las acciones en cada paso
+for i in range(1, N+1):
+    stock_prices[i] = stock_prices[i-1] * u
+
+# Calcular los valores de la opción en el último paso (a la expiración)
+option_values = np.maximum(stock_prices - K, 0)
+
+# Retroceder en el tiempo para calcular el valor de la opción en cada paso anterior
+for j in range(N-1, -1, -1):
+    for i in range(j+1):
+        option_values[i] = (q * option_values[i+1] + (1 - q) * option_values[i]) * discount_factor
+
+# El valor de la opción de compra (CALL) es el valor en el paso inicial
+call_option_value = option_values[0]
+
+print("Valor de la opción (CALL) mediante el modelo binomial:", call_option_value)
+```
+
+## Análisis de resultados:
+
+Mediante el modelo Black Scholes se obtiene que el valor (CALL) de la opción es de 0.2258 y con el modelo Binomial de 1 periodo se obtuvo un valor de 0.0 esto se debe a que en el periodo 1 al ser el precio de ejercicio mayor al precio del activo subyacente el modelo binomial va a dar como valor 0 ya que busca el maximo entre la resta de esos valores y el cero. Pero cuando se le ponen mas periodos al modelo binomial, este tiende a subir de valor y ser similar al valor que da el modelo de black scholes.
+
+El modelo Black Scholes al ser un valor bajo pero no nulo, se acerca mas a la realidad, por lo que es mejor al modelo binomial que fluctúa en varios valores dependiendo las probabilidades que se le asignen a los estados up y down.
+
+## **Pregunta Grupal**
+
+Caso Administración de Efectivo de Braam Industries de la página 874 del ROSS.
+
+Activo elegido: Empresas Copec S.A.
+
+Para obtener la informacion necesaria se ocuparon los estados financieros de Empresas Copec S.A del año 2022.
+
+En el siguiente enlace sacamos informacion para obetener los datos necesarios https://www.empresascopec.cl/wp-content/uploads/2023/04/Memoria-Integrada-Empresas-Copec-2022.pdf
+
+![](hito2gestfin.jpg)
+
+La empresa debe adoptar la opcion numero 1 debido a que es en la cual el VPN es el mas grande.
+
+Respecto a la opcion 3 esta no es factible de realizar debido a que los dias para cobrar son superiores a la opcion 1 y tiene un mayor costo administrativo. Si bien la tasa de incumplimiento es menor a la opcion 1 esta no logra afectar del todo a la hora de calcular el VPN. Es por esto que de todos modos la mejor opcion es la opcion 1.
